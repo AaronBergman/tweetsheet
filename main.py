@@ -76,21 +76,21 @@ st.title("Twitter Data Extractor")
 uploaded_file = st.file_uploader("Upload your tweets.zip file", type="zip")
 
 if uploaded_file is not None:
-    zip_file_name = uploaded_file.name
-    base_folder_name = os.path.splitext(zip_file_name)[0]
-
     with zipfile.ZipFile(uploaded_file, 'r') as zipped_file:
-        path_in_zip = os.path.join(base_folder_name, 'data', 'tweets.js')
-        if path_in_zip in zipped_file.namelist():
-            with zipped_file.open(path_in_zip) as tweets_js_file:
-                tweets_js_content = tweets_js_file.read()
+        tweets_js_path = None
+        for file_name in zipped_file.namelist():
+            if file_name.endswith('tweets.js'):
+                tweets_js_path = file_name
+                break
 
+        if tweets_js_path:
+            with zipped_file.open(tweets_js_path) as tweets_js_file:
+                tweets_js_content = tweets_js_file.read()
         else:
-            st.error(f"The zip file does not contain '{path_in_zip}'. Please check the file and try again.")
+            st.error("The zip file does not contain 'tweets.js'. Please check the file and try again.")
             st.stop()
 
     processed_data = process_file(tweets_js_content)
-# ... [rest of your code remains unchanged] ...
 
     if processed_data:
         # Create DataFrame from processed data
