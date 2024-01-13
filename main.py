@@ -71,7 +71,7 @@ def process_file(uploaded_file_content):
         st.error(f"Error details: {e}")
         return None
 
-st.title("Twitter Data Extractor")
+st.title("Your tweets as a spreadsheet")
 
 uploaded_file = st.file_uploader("Upload your tweets.zip file", type="zip")
 
